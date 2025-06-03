@@ -1,0 +1,80 @@
+
+syntax = "proto3";
+
+package order;
+
+service OrderService {
+  rpc CreateOrder (CreateOrderRequest) returns (CreateOrderResponse);
+  rpc CancelOrder (CancelOrderRequest) returns (CancelOrderResponse);
+  rpc GetOrderStatus (GetOrderStatusRequest) returns (GetOrderStatusResponse);
+  rpc UpdateOrderStatus (UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse);
+  rpc GetOrderHistory (GetOrderHistoryRequest) returns (GetOrderHistoryResponse);
+}
+
+enum OrderStatus {
+  PENDING = 0;
+  PROCESSING = 1;
+  SHIPPED = 2;
+  DELIVERED = 3;
+  CANCELLED = 4;
+}
+
+message CreateOrderRequest {
+  CreateOrderDto createOrderDto = 1;
+  string token = 2;
+}
+
+message CreateOrderDto {
+  string idempotencyKey = 1;
+  string userId = 2;
+}
+
+message CreateOrderResponse {
+  string message = 1;
+}
+
+message CancelOrderRequest {
+  CancelOrderDto cancelOrderDto = 1;
+}
+
+message CancelOrderDto {
+  string orderId = 1;
+}
+
+message CancelOrderResponse {
+  string message = 1;
+}
+
+message GetOrderStatusRequest {
+  string orderId = 1;
+}
+
+message GetOrderStatusResponse {
+  string message = 1;
+  OrderStatus status = 2;
+}
+
+message UpdateOrderStatusRequest {
+  string orderId = 1;
+  OrderStatus statusValue = 2;
+}
+
+message UpdateOrderStatusResponse {
+  string message = 1;
+}
+
+message GetOrderHistoryRequest {
+  string userId = 1;
+}
+
+message GetOrderHistoryResponse {
+  repeated Order orders = 1;
+}
+
+message Order {
+  string id = 1;
+  string userId = 2;
+  string idempotencyKey = 3;
+  OrderStatus status = 4;
+  bool isCancelled = 5;
+}
