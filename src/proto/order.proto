@@ -1,4 +1,3 @@
-
 syntax = "proto3";
 
 package order;
@@ -46,16 +45,16 @@ message CancelOrderResponse {
 }
 
 message GetOrderStatusRequest {
-  string orderId = 1;
+  string userId = 1;
 }
 
 message GetOrderStatusResponse {
   string message = 1;
-  OrderStatus status = 2;
+  repeated Order orders = 2;
 }
 
 message UpdateOrderStatusRequest {
-  string orderId = 1;
+  string userId = 1;
   OrderStatus statusValue = 2;
 }
 

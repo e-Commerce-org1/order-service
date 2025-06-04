@@ -19,12 +19,12 @@ export class AppController {
   }
 
   @GrpcMethod('OrderService', 'GetOrderStatus')
-  async getOrderStatus(data: { orderId: string }) {
+  async getOrderStatus(data: { userId: string }) {
     return this.orderService.getOrderStatus(data);
   }
 
   @GrpcMethod('OrderService', 'UpdateOrderStatus')
-  async updateOrderStatus(data: { orderId: string; statusValue: any }) {
+  async updateOrderStatus(data: { userId: string; statusValue: any }) {
     return this.orderService.updateOrderStatus(data);
   }
 
