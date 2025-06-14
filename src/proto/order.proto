@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package order;
+
+service OrderService {
+  rpc GetOrderDetails (OrderRequest) returns (OrderResponse);
+}
+
+message OrderRequest {
+  string orderId = 1;
+}
+
+message OrderResponse {
+  string orderId = 1;
+  string userId = 2;
+  repeated ProductItem products = 3;
+  Address address = 4;
+  double totalPrice = 5;
+  string status = 6;
+  string paymentStatus = 7;
+}
+
+message ProductItem {
+  string productId = 1;
+  string description = 2;
+  string color = 3;
+  string size = 4;
+  int32 quantity = 5;
+  double price = 6;
+}
+
+message Address {
+  string name = 1;
+  string phoneNumber = 2;
+  string street = 3;
+  string city = 4;
+  string state = 5;
+  string country = 6;
+  string postalCode = 7;
+}

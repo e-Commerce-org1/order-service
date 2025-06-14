@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package product;
+
+service ProductService {
+  rpc UpdateProductStock (UpdateStockRequest) returns (UpdateStockResponse);
+}
+
+message UpdateStockRequest {
+  repeated StockUpdate updates = 1;
+}
+
+message StockUpdate {
+  string productId = 1;
+  int32 quantity = 2;
+  string size = 3;
+  string color = 4;
+}
+
+message UpdateStockResponse {
+  bool success = 1;
+}
