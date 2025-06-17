@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package product;
+
+service ProductService {
+  rpc CreateProduct (CreateProductRequest) returns (Response);
+  rpc UpdateProduct (UpdateProductRequest) returns (Response);
+  rpc GetProduct (ProductID) returns (Response);
+  rpc ListProducts (ProductFilter) returns (Response);
+  rpc DeleteProduct (ProductID) returns (Response);
+  rpc UpdateInventory (UpdateInventoryRequest) returns (Response);
+  rpc UpdateInventoryByOrder (UpdateInventoryByOrderRequest) returns (Response);
+}
+
+message Response {
+  int32 code = 1;
+  string status = 2;
+  string timestamp = 3;
+  string data = 4;
+  string error = 5;
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string category = 2;
+  optional string subCategory = 3;
+  optional string gender = 4;
+  string brand = 5;
+  string imageUrl = 6;
+  string description = 7;
+  double price = 8;
+  int32 totalStock = 9;
+  repeated Variant variants = 10;
+}
+
+message UpdateProductRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string category = 3;
+  optional string subCategory = 4;
+  optional string gender = 5;
+  optional string brand = 6;
+  optional string imageUrl = 7;
+  optional string description = 8;
+  optional double price = 9;
+  repeated Variant variants = 10;
+}
+
+message Variant {
+  string size = 1;
+  string color = 2;
+  int32 stock = 3;
+}
+
+message ProductID {
+  string id = 1;
+}
+
+message ProductFilter {
+  optional int32 page = 1;
+  optional int32 pageSize = 2;
+  optional string category = 3;
+  optional string brand = 4;
+  optional string subCategory = 5;
+  optional string name = 6;
+  optional string gender = 7;
+}
+
+message UpdateInventoryRequest {
+  string productId = 1;
+  repeated Variant variants = 2;
+}
+
+message UpdateInventoryByOrderRequest {
+  repeated InventoryChange items = 1;
+}
+
+message InventoryChange {
+  string productId = 1;
+  string size = 2;
+  string color = 3;
+  int32 quantity = 4;
+  bool increase = 5;
+}

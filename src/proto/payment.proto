@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package payment;
+
+service PaymentService {
+  rpc CreateCheckoutSession (CreateCheckoutSessionRequest) returns (CreateCheckoutSessionResponse);
+  rpc CreateRefund (CreateRefundRequest) returns (CreateRefundResponse);
+}
+
+message CreateCheckoutSessionRequest {
+  string orderId = 1;
+  int64 amount = 2;
+  string currency = 3;
+}
+
+message CreateCheckoutSessionResponse {
+  string sessionId = 1;
+  string paymentUrl = 2;
+}
+
+message CreateRefundRequest {
+  string orderId = 1;
+  string sessionId = 2;
+}
+
+message CreateRefundResponse {
+  string refundId = 1;
+  string status = 2;
+}

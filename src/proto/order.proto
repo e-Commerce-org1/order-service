@@ -1,0 +1,164 @@
+syntax = "proto3";
+
+package order;
+
+service OrderService {
+  rpc CreateOrder (CreateOrderRequest) returns (CreateOrderResponse);
+  rpc HandlePaymentSuccess (PaymentSuccessRequest) returns (PaymentSuccessResponse);
+  rpc RefundOrder (RefundOrderRequest) returns (RefundOrderResponse);
+  rpc GetAllOrdersByUser (UserIdRequest) returns (OrdersResponse);
+  rpc GetOrderById (GetOrderRequest) returns (OrderResponse);
+  rpc CancelOrder (CancelOrderRequest) returns (CancelOrderResponse);
+  rpc ExchangeOrder (ExchangeOrderRequest) returns (ExchangeOrderResponse);
+  rpc AddReview (AddReviewRequest) returns (AddReviewResponse);
+  rpc GetAllOrders (GetAllOrdersRequest) returns (GetAllOrdersResponse);
+  rpc UpdateOrderStatus (UpdateOrderStatusRequest) returns (UpdateOrderStatusResponse);
+  rpc GetOrderDetails (OrderRequest) returns (OrderResponse);
+}
+
+message CreateOrderRequest {
+  string userId = 1;
+  Address address = 2;
+}
+
+message Address {
+  string name = 1;
+  string phoneNumber = 2;
+  string street = 3;
+  string city = 4;
+  string state = 5;
+  string country = 6;
+  string postalCode = 7;
+}
+
+message CreateOrderResponse {
+  string orderId = 1;
+  string sessionId = 2;
+  string paymentUrl = 3;
+  double totalPrice = 4;
+  repeated ProductItem products = 5;
+}
+
+message ProductItem {
+  string productId = 1;
+  string description = 2;
+  string color = 3;
+  string size = 4;
+  int32 quantity = 5;
+  double price = 6;
+}
+
+message PaymentSuccessRequest {
+  string orderId = 1;
+  string sessionId = 2;
+  string status = 3;
+}
+
+message PaymentSuccessResponse {
+  bool success = 1;
+  string orderId = 2;
+}
+
+message RefundOrderRequest {
+  string orderId = 1;
+  string userId = 2;
+  string reason = 3;
+}
+
+message RefundOrderResponse {
+  bool success = 1;
+  string orderId = 2;
+  string refundId = 3;
+  string message = 4;
+}
+
+message UserIdRequest {
+  string userId = 1;
+}
+
+message OrdersResponse {
+  repeated OrderResponse orders = 1;
+}
+
+message GetOrderRequest {
+  string orderId = 1;
+  string userId = 2;
+}
+
+message OrderResponse {
+  string orderId = 1;
+  string userId = 2;
+  repeated ProductItem products = 3;
+  Address address = 4;
+  double totalPrice = 5;
+  string status = 6;
+  string paymentStatus = 7;
+  string sessionId = 8;
+  string paymentUrl = 9;
+  string refundId = 10;
+  repeated ReviewItem reviews = 11;
+  string createdAt = 12; // ISO 8601 string for timestamp
+}
+
+message ReviewItem {
+  string productId = 1;
+  string review = 2;
+}
+
+message CancelOrderRequest {
+  string orderId = 1;
+  string userId = 2;
+}
+
+message CancelOrderResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ExchangeOrderRequest {
+  string orderId = 1;
+  string userId = 2;
+}
+
+message ExchangeOrderResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message AddReviewRequest {
+  string orderId = 1;
+  string userId = 2;
+  string productId = 3;
+  string review = 4;
+}
+
+message AddReviewResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetAllOrdersRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message GetAllOrdersResponse {
+  repeated OrderResponse orders = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 totalPages = 4;
+}
+
+message UpdateOrderStatusRequest {
+  string orderId = 1;
+  string status = 2;
+}
+
+message UpdateOrderStatusResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message OrderRequest {
+  string orderId = 1;
+}
