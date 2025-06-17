@@ -31,15 +31,18 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
+  //Creates a new order from cart contents
+  //@param req Automatically populated with user info from 
+  
   @Post('create')
   @ApiOperation({ summary: 'Create a new order' })
   @ApiResponse({ status: 201, description: 'Order created successfully.' })
   async createOrder(@Body() dto: CreateOrderDto, @Req() req: any) {
-    // const userId = '684b24af25685f85d1d4f2f4';
     const userId = req.user?.userId;
-    // console.log('User ID from request:', userId);
     return this.orderService.createOrder({ ...dto, userId });
   }
+
+  //@param dto Contains payment confirmation details
 
   @Post('payment-success')
   @ApiOperation({ summary: 'Handle payment success' })
@@ -47,6 +50,12 @@ export class OrderController {
   async paymentSuccess(@Body() dto: PaymentSuccessDto) {
     return this.orderService.handlePaymentSuccess(dto);
   }
+
+  /*
+      Initiates refund process for an order
+   * @param dto Contains refund reason/details
+   * @param req For getting user ID from JWT
+  */
 
   @Post('refund')
   @ApiOperation({ summary: 'Request a refund for an order' })
@@ -59,6 +68,8 @@ export class OrderController {
     return this.orderService.refundOrder({ ...dto, userId });
   }
 
+    // Gets all orders for the authenticated user
+
   @Get('user')
   @ApiOperation({ summary: 'Get orders for the authenticated user' })
   @ApiResponse({ status: 200, description: 'List of user orders.' })
@@ -66,6 +77,8 @@ export class OrderController {
     const userId = req.user?.userId;
     return this.orderService.getAllOrdersByUser(userId);
   }
+
+  //Gets specific order details
 
   @Get(':orderId')
   @ApiOperation({ summary: 'Get order details by order ID' })
@@ -75,6 +88,8 @@ export class OrderController {
     return this.orderService.getOrderById(orderId, userId);
   }
 
+  //Cancels a pending order
+
   @Post(':orderId/cancel')
   @ApiOperation({ summary: 'Cancel an order' })
   @ApiResponse({ status: 200, description: 'Order cancelled successfully.' })
@@ -83,6 +98,8 @@ export class OrderController {
     return this.orderService.cancelOrder(orderId, userId);
   }
 
+  //Requests exchange for delivered order
+
   @Post(':orderId/exchange')
   @ApiOperation({ summary: 'Exchange an order' })
   @ApiResponse({ status: 200, description: 'Order exchange processed.' })
@@ -90,6 +107,9 @@ export class OrderController {
     const userId = req.user?.userId;
     return this.orderService.exchangeOrder(orderId, userId);
   }
+
+  //dds product review to order
+  // Only for delivered orders
 
   @Post('review')
   @ApiOperation({ summary: 'Add a review for a product in an order' })
@@ -100,6 +120,8 @@ export class OrderController {
   }
 
   // Admin routes
+
+  //Gets paginated list of all orders (Admin only)
   @Get()
   @ApiOperation({ summary: 'Get all orders (admin)' })
   @ApiResponse({ status: 200, description: 'List of all orders.' })
@@ -109,6 +131,8 @@ export class OrderController {
   ) {
     return this.orderService.getAllOrders(page, limit);
   }
+
+  // Admin-only endpoint to update order status
 
   @Put(':orderId/status')
   @ApiOperation({ summary: 'Update order status (admin)' })
@@ -120,32 +144,4 @@ export class OrderController {
     return this.orderService.updateOrderStatus(orderId, body.status);
   }
 
-  // gRPC methods
-
-  @GrpcMethod('OrderService', 'GetOrderDetails')
-  @ApiOperation({ summary: 'gRPC: Get order details' })
-  @ApiResponse({ status: 200, description: 'Order details retrieved.' })
-  async getOrderDetails(data: { orderId: string }) {
-    const order = await this.orderService.getOrderById(data.orderId, '');
-    return order;
-  }
-
-  @GrpcMethod('OrderService', 'GetAllOrders')
-  @ApiOperation({ summary: 'gRPC: Get order details' })
-  @ApiResponse({ status: 200, description: 'Order details retrieved.' })
-  async getOrders(page:number,limit:number) {
-    const order = await this.orderService.getAllOrders(page,limit);
-    return order;
-  }
-
-  @GrpcMethod('OrderService', 'UpdateOrderStatus')
-  @ApiOperation({ summary: 'gRPC: Update order status (admin)' })
-  @ApiResponse({ status: 200, description: 'Order status updated.' })
-  async updateOrderStatusGrpc(data: { orderId: string; status: string }) {
-    const result = await this.orderService.updateOrderStatus(data.orderId, data.status);
-    return {
-      success: result ? true : false,
-      message: result ? 'Order status updated successfully' : 'Failed to update order status',
-    };
-  }
 }

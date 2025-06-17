@@ -1,8 +1,7 @@
+
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { join } from 'path';
 import { OrderModule } from './order-service/order.module';
 
 @Module({
@@ -10,12 +9,11 @@ import { OrderModule } from './order-service/order.module';
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URI'),
       }),
       inject: [ConfigService],
     }),
- 
     OrderModule,
   ],
 })
