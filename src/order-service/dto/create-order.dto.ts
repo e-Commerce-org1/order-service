@@ -39,7 +39,6 @@ export class AddressDto {
 }
 
 export class CreateOrderDto {
-  @ApiProperty({ description: 'User ID placing the order' })
   @IsString()
   @IsNotEmpty()
   userId: string;

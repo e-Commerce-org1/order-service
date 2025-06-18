@@ -1,4 +1,3 @@
-
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
@@ -25,14 +24,12 @@ async function bootstrap() {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
-        name: 'Authorization',
+        description: 'Enter JWT token',
         in: 'header',
       },
-      'access-token',
+      'JWT-auth',
     )
-    .addSecurityRequirements({
-      'access-token': [],
-    })
+    .addSecurityRequirements({ 'JWT-auth': [] })
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

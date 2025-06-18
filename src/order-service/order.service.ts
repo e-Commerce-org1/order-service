@@ -73,7 +73,9 @@ export class OrderService {
         throw new NotFoundException(RESPONSE_MESSAGES.CART_EMPTY);
       }
 
-      const totalPrice = cartData.reduce((sum, item) => sum + item.price * item.quantity, 0);
+     // const totalPrice = cartData.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+     const totalPrice =100;
 
       const order = new this.orderModel({
         userId: dto.userId,

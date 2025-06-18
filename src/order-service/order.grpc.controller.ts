@@ -1,17 +1,20 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { OrderService } from './order.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from 'src/middleware/auth.guard';
 
 @Controller()
+@UseGuards(AuthGuard)
 export class OrderGrpcController {
   constructor(private readonly orderService: OrderService) {}
 
   @GrpcMethod('OrderService', 'GetOrderDetails')
   @ApiOperation({ summary: 'gRPC: Get order details' })
   @ApiResponse({ status: 200, description: 'Order details retrieved.' })
-  async getOrderDetails(data: { orderId: string }) {
-    const order = await this.orderService.getOrderById(data.orderId, '');
+  async getOrderDetails(data: { orderId: string; user?: { userId: string } }) {
+    const userId = data.user?.userId || '';
+    const order = await this.orderService.getOrderById(data.orderId, userId);
     return order;
   }
 
@@ -33,5 +36,4 @@ export class OrderGrpcController {
       message: result ? 'Order status updated successfully' : 'Failed to update order status',
     };
   }
-
 }

@@ -26,7 +26,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('orders')
 @UseGuards(AuthGuard)
-@ApiBearerAuth()
+@ApiBearerAuth('JWT-auth')
 @ApiTags('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
@@ -123,7 +123,7 @@ export class OrderController {
 
   //Gets paginated list of all orders (Admin only)
   @Get()
-  @ApiOperation({ summary: 'Get all orders (admin)' })
+  @ApiOperation({ summary: 'Get all orders' })
   @ApiResponse({ status: 200, description: 'List of all orders.' })
   async getAllOrders(
     @Query('page') page: number = 1,
@@ -135,7 +135,7 @@ export class OrderController {
   // Admin-only endpoint to update order status
 
   @Put(':orderId/status')
-  @ApiOperation({ summary: 'Update order status (admin)' })
+  @ApiOperation({ summary: 'Update order status' })
   @ApiResponse({ status: 200, description: 'Order status updated.' })
   async updateOrderStatus(
     @Param('orderId') orderId: string,
