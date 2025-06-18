@@ -1,33 +1,52 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsOptional, ValidateNested, IsPhoneNumber } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class AddressDto {
   @ApiProperty({ description: 'Name of the recipient' })
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty({ description: 'Phone number of the recipient' })
+  @IsPhoneNumber(undefined)
   phoneNumber: string;
 
   @ApiProperty({ description: 'Street address' })
+  @IsString()
+  @IsNotEmpty()
   street: string;
 
   @ApiProperty({ description: 'City' })
+  @IsString()
+  @IsNotEmpty()
   city: string;
 
   @ApiProperty({ description: 'State' })
+  @IsString()
+  @IsNotEmpty()
   state: string;
 
   @ApiProperty({ description: 'Country' })
+  @IsString()
+  @IsNotEmpty()
   country: string;
 
   @ApiProperty({ description: 'Postal code' })
+  @IsString()
+  @IsNotEmpty()
   postalCode: string;
 }
 
 export class CreateOrderDto {
   @ApiProperty({ description: 'User ID placing the order' })
+  @IsString()
+  @IsNotEmpty()
   userId: string;
 
   @ApiProperty({ description: 'Shipping address', type: AddressDto })
+  @ValidateNested()
+  @Type(() => AddressDto)
   address: AddressDto;
 }
 
@@ -64,5 +83,7 @@ export class RefundOrderDto {
   userId: string;
 
   @ApiProperty({ description: 'Reason for refund', required: false })
+  @IsOptional()
+  @IsString()
   reason?: string;
 }
