@@ -73,7 +73,7 @@ export class OrderService {
         throw new NotFoundException(RESPONSE_MESSAGES.CART_EMPTY);
       }
 
-      const totalPrice = 100;
+      const totalPrice = cartData.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
       const order = new this.orderModel({
         userId: dto.userId,
@@ -146,7 +146,7 @@ export class OrderService {
         quantity: product.quantity,
         size: product.size,
         color: product.color,
-        increase: true,
+        increase: false,
       }));
 
       await lastValueFrom(this.cartService.ClearCart({ userId: order.userId }));
@@ -361,7 +361,7 @@ export class OrderService {
       const total = await this.orderModel.countDocuments();
 
       return {
-        orders,
+        orders:orders || [],
         total,
         page,
         totalPages: Math.ceil(total / limit),
