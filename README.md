@@ -20,10 +20,36 @@
 </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
+  
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
+
+# ORDER SERVICE 
+
+## OVERVIEW 
+The Order Service is a NestJS-based microservice responsible for managing e-commerce orders. It handles order creation, payment processing, refunds, cancellations, exchanges, reviews, and order status updates. The service integrates with other microservices (Payment, Cart, Product, and Auth) via gRPC and uses MongoDB for data persistence.
+
+# Features
+
+Order Creation: Creates orders from cart contents with payment session generation.
+
+Payment Handling: Processes successful payments and updates order status.
+
+Refunds: Initiates refunds within 30 days for eligible orders.
+
+Order Cancellation: Allows cancellation of pending orders.
+
+Order Exchange: Supports exchanges for delivered orders within 7 days.
+
+Reviews: Enables users to add reviews for delivered products.
+
+Order Retrieval: Fetches user-specific or all orders (admin) with pagination.
+
+Status Updates: Allows admins to update order statuses.
+
+gRPC Support: Exposes endpoints for inter-service communication.
 
 ## Project setup
 
